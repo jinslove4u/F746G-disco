@@ -1,3 +1,6 @@
+
+
+
 #include <SPI.h>
 ///#include "Adafruit_GFX.h"
 #include "LTDC_F746_Discovery.h"
@@ -36,17 +39,6 @@ byte PACMANFALLBACK = 0;
 /*   Controll KEYPAD LOOP                                                     */
 /******************************************************************************/
 
-#define RC100_BTN_U		1
-#define RC100_BTN_D		2
-#define RC100_BTN_L		4
-#define RC100_BTN_R		8
-#define RC100_BTN_1		16
-#define RC100_BTN_2		32
-#define RC100_BTN_3		64
-#define RC100_BTN_4		128
-#define RC100_BTN_5		256
-#define RC100_BTN_6		512
-
  boolean but_START = false;    //38
  boolean but_SELECT = false;   //40
  boolean but_A = false;        //44
@@ -69,54 +61,54 @@ void ClearKeys() {
 
 void KeyPadLoop(){
 
-  int RcvData = 0;
+  char RcvData = 0;
 
 //  if (Controller.available())
   if (Serial.available())
   {
     RcvData = Serial.read();
 
-    if( 'A' )
+    if( RcvData == 'A' ||  RcvData == 'a')
     {
        //Serial.println("but_START");
        ClearKeys();  but_START=true; delay(300);
     }
-    else if ( 'B' )
+    else if (  RcvData == 'B' || RcvData ==  'b')
     {
        //Serial.println("but_SELECT");
        ClearKeys();  but_SELECT=true; delay(300);
     }
-    else if ( RcvData & RC100_BTN_1 )
+    else if (  RcvData == 'C' || RcvData ==  'c' )
     {
        //Serial.println("but_A");
        ClearKeys();  but_A=true;
     }
-    else if ( RcvData & RC100_BTN_2 )
+    else if ( RcvData ==  'x' || RcvData ==  'X' )
     {
        //Serial.println("but_B");
        ClearKeys();  but_B=true;
     }
-    else if ( 'i' )
+    else if ( RcvData ==  'i' || RcvData ==  'I')
     {
        Serial.println("but_UP");
        ClearKeys();  but_UP=true;
     }
-    else if ( 'm' )
+    else if ( RcvData ==  'm' || RcvData ==  'M')
     {
        Serial.println("but_DOWN");
        ClearKeys();  but_DOWN=true;
     }
-    else if ( 'j' )
+    else if ( RcvData ==  'j' || RcvData ==  'J')
     {
        Serial.println("but_LEFT");
        ClearKeys();  but_LEFT=true;
     }
-    else if ( 'k' )
+    else if ( RcvData ==  'k' || RcvData ==  'K')
     {
        Serial.println("but_RIGHT");
        ClearKeys();  but_RIGHT=true;
     }
-    else if ( RcvData & RC100_BTN_3 )
+    else if ( RcvData ==  's' || RcvData ==  'S' )
     {
         if(SPEED == 1) SPEED = 2;
         else if(SPEED == 2) SPEED = 4;
@@ -712,7 +704,7 @@ public:
 //------------------------------------------------------------------------------
     }
 
-    boolean updateMap [36][28];
+    boolean updateMap [36][28];  // 해상도 288x224
 
     //  Mark tile as dirty (should not need range checking here)
     void Mark(int16_t x, int16_t y, byte* m)
@@ -1521,7 +1513,7 @@ void setup() {
   uint16_t *buffer = (uint16_t *)malloc(2*LTDC_F746_ROKOTECH.width * LTDC_F746_ROKOTECH.height);
   tft.begin((uint16_t *)buffer);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
 
 ///  tft.begin();
   tft.setRotation(0);
